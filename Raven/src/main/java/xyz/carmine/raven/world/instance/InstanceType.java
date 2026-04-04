@@ -1,4 +1,6 @@
 package xyz.carmine.raven.world.instance;
 
-public class InstanceType {
+public enum InstanceType {
+    LOBBY,
+    PRIVATE,
 }

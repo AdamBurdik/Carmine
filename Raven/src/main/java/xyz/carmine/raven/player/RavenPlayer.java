@@ -16,8 +16,6 @@ public class RavenPlayer extends Player {
             @NotNull GameProfile gameProfile
     ) {
         super(playerConnection, gameProfile);
-
-        log.info("This is logged from: {}", Thread.currentThread().getName());
     }
 
     public void setData(@NotNull PlayerData data) {

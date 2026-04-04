@@ -1,4 +1,4 @@
-package xyz.carmine.raven.discord;
+package xyz.carmine.raven.external.discord;
 
 import net.minestom.server.MinecraftServer;
 import redis.clients.jedis.JedisPubSub;

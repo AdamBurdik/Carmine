@@ -1,12 +1,9 @@
-package xyz.carmine.raven.player.data.service;
+package xyz.carmine.raven.player.data;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import xyz.carmine.raven.player.RavenPlayer;
-import xyz.carmine.raven.player.data.PlayerData;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;

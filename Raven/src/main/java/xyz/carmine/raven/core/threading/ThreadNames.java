@@ -1,4 +1,4 @@
-package xyz.carmine.raven.utils;
+package xyz.carmine.raven.core.threading;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -1,12 +1,11 @@
-package xyz.carmine.raven.discord;
+package xyz.carmine.raven.external.discord;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
 import xyz.carmine.raven.exception.ServiceConnectionException;
-import xyz.carmine.raven.utils.ThreadNames;
+import xyz.carmine.raven.core.threading.ThreadNames;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

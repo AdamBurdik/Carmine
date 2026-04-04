@@ -1,11 +1,10 @@
-package xyz.carmine.raven.player.data.service;
+package xyz.carmine.raven.player.data;
 
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import xyz.carmine.raven.exception.ServiceConnectionException;
-import xyz.carmine.raven.player.data.PlayerData;
 
 import java.util.Optional;
 import java.util.UUID;
