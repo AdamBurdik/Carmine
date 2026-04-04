@@ -21,8 +21,11 @@ import xyz.carmine.raven.player.data.PlayerData;
 import xyz.carmine.raven.player.data.PlayerDataRepository;
 import xyz.carmine.raven.player.data.PlayerDataService;
 import xyz.carmine.raven.world.instance.InstanceSettings;
-import xyz.carmine.raven.world.instance.InstanceTemplate;
+import xyz.carmine.raven.world.instance.player.PlayerInstanceRepository;
+import xyz.carmine.raven.world.instance.player.PlayerInstanceService;
+import xyz.carmine.raven.world.instance.template.InstanceTemplate;
 import xyz.carmine.raven.world.instance.InstanceType;
+import xyz.carmine.raven.world.instance.template.InstanceTemplateRegistry;
 
 @Slf4j
 public class Raven {
@@ -31,17 +34,9 @@ public class Raven {
 
     public static Instance lobbyInstance;
 
-    static DiscordService discordService;
-    static PlayerDataService playerDataService;
-
-    static InstanceTemplate LOBBY_TEMPLATE = new InstanceTemplate(
-            "lobby",
-            InstanceType.LOBBY,
-            unit -> unit.modifier().fillHeight(0, 1, Block.STONE),
-            DimensionType.OVERWORLD,
-            null,
-            new InstanceSettings(new Pos(0, 2, 0), false)
-    );
+    public static DiscordService discordService;
+    public static PlayerDataService playerDataService;
+    public static PlayerInstanceService playerInstanceService;
 
     static void main() throws ServerStartException {
         try {
@@ -58,13 +53,42 @@ public class Raven {
             throw new ServerStartException("Player data service failed to start: " + e.getMessage());
         }
 
+        try {
+            playerInstanceService = new PlayerInstanceService(
+                    new PlayerInstanceRepository(REDIS_HOST, REDIS_PORT)
+            );
+        } catch (ServiceConnectionException e) {
+            throw new ServerStartException("Player instance service failed to start: " + e.getMessage());
+        }
+
+        // Register default instance templates
+        InstanceTemplateRegistry.register(
+                new InstanceTemplate(
+                        "lobby",
+                        InstanceType.LOBBY,
+                        unit -> unit.modifier().fillHeight(0, 1, Block.STONE),
+                        DimensionType.OVERWORLD,
+                        null,
+                        new InstanceSettings(new Pos(0, 2, 0), false)
+                ),
+                new InstanceTemplate(
+                        "player-instance",
+                        InstanceType.PLAYER_SPECIFIC,
+                        unit -> unit.modifier().fillHeight(0, 1, Block.GRASS_BLOCK),
+                        DimensionType.OVERWORLD,
+                        null,
+                        new InstanceSettings(new Pos(0, 2, 0), false)
+                )
+        );
+
         MinecraftServer server = MinecraftServer.init(new Auth.Offline());
 
         // Set custom player provider
         MinecraftServer.getConnectionManager().setPlayerProvider(new RavenPlayerProvider());
 
         // Create lobby instance
-        lobbyInstance = LOBBY_TEMPLATE.createInstance();
+        lobbyInstance = InstanceTemplateRegistry.get("lobby")
+                .createInstance();
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
@@ -101,10 +125,12 @@ public class Raven {
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
             discordService.shutdown();
 
+
             log.info("Shutting down... saving player data");
             playerDataService.saveAllPlayers().join();
             log.info("Player data saved. Closing connections.");
             playerDataService.shutdown();
+            playerInstanceService.shutdown();
         });
     }
 }

@@ -1,7 +1,6 @@
-package xyz.carmine.raven.world.instance;
+package xyz.carmine.raven.world.instance.template;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.ChunkLoader;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
@@ -12,6 +11,8 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.carmine.raven.core.tags.RavenTags;
+import xyz.carmine.raven.world.instance.InstanceSettings;
+import xyz.carmine.raven.world.instance.InstanceType;
 
 
 public record InstanceTemplate(
