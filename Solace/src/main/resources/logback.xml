@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+	<conversionRule conversionWord="highlightex" converterClass="xyz.carmine.lumen.lombok.HighlightingCompositeConverterEx"/>
+
+	<appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>[%d{HH:mm:ss}] [%boldCyan(%-1.-25thread)/%highlightex(%level)] %boldGreen(%logger{0}): %msg%nopex%n</pattern>
+		</layout>
+	</appender>
+
+	<appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/solace-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+			<maxHistory>14</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%d{HH:mm:ss}] [%thread/%level] %logger{0}: %msg%nopex%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FileDebug" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/solace-debug-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+			<maxHistory>14</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%d{HH:mm:ss}] [%thread/%level] %logger{0}: %msg%n%ex{full}</pattern>
+		</encoder>
+	</appender>
+
+	<root level="info">
+		<appender-ref ref="Console"/>
+		<appender-ref ref="File"/>
+		<appender-ref ref="FileDebug"/>
+	</root>
+</configuration>
