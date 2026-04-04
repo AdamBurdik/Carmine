@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerChatEvent;
@@ -13,9 +12,8 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.timer.TaskSchedule;
-import org.slf4j.Logger;
-import redis.clients.jedis.util.RedisInputStream;
-import xyz.carmine.raven.discord.DiscordService;
+import xyz.carmine.raven.external.discord.DiscordService;
+import xyz.carmine.raven.exception.ServerStartException;
 import xyz.carmine.raven.exception.ServiceConnectionException;
 import xyz.carmine.raven.player.RavenPlayer;
 import xyz.carmine.raven.player.RavenPlayerProvider;
@@ -33,16 +31,20 @@ public class Raven {
     static DiscordService discordService;
     static PlayerDataService playerDataService;
 
-    static void main() {
+    static void main() throws ServerStartException {
         try {
             discordService = new DiscordService(REDIS_HOST, REDIS_PORT);
         } catch (ServiceConnectionException e) {
             log.error("Discord service failed: {}", e.getMessage());
         }
 
-        playerDataService = new PlayerDataService(
-                new PlayerDataRepository(REDIS_HOST, REDIS_PORT)
-        );
+        try {
+            playerDataService = new PlayerDataService(
+                    new PlayerDataRepository(REDIS_HOST, REDIS_PORT)
+            );
+        } catch (ServiceConnectionException e) {
+            throw new ServerStartException("Player data service failed to start: " + e.getMessage());
+        }
 
         MinecraftServer server = MinecraftServer.init(new Auth.Online());
 

@@ -8,7 +8,6 @@ import xyz.carmine.raven.player.data.PlayerData;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;

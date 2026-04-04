@@ -46,7 +46,16 @@ public class DiscordService {
     private void startSubscriber() {
         new Thread(() -> {
             log.info("Subscribed for {}", DISCORD_TO_MC);
-            subscriberJedis.subscribe(new DiscordMessageSubscriber(), DISCORD_TO_MC);
+            try {
+                subscriberJedis.subscribe(new DiscordMessageSubscriber(), DISCORD_TO_MC);
+            } catch (Exception e) {
+                System.err.println("Redis connection lost. Retrying in 5 seconds...");
+                try {
+                    Thread.sleep(5000); // Don't spam retries
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
+            }
         }, ThreadNames.DISCORD_CHAT_SUBSCRIBER.toString()).start();
     }
 
