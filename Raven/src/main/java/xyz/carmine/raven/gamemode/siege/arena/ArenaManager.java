@@ -26,7 +26,7 @@ public class ArenaManager {
             Instance newInstance = event.getSpawnInstance();
 
             // Check if player is leaving arena
-            UUID currentArenaUuid = player.getTag(RavenTags.INSTANCE_CASTLE_SIEGE_ARENA_ID);
+            UUID currentArenaUuid = player.getTag(RavenTags.CASTLE_SIEGE_ARENA_ID);
             if (currentArenaUuid != null) {
                 SiegeArena currentArena = arenaMap.get(currentArenaUuid);
 
@@ -37,7 +37,7 @@ public class ArenaManager {
             }
 
             // Check if player is joining new arena
-            UUID newArenaUuid = newInstance.getTag(RavenTags.INSTANCE_CASTLE_SIEGE_ARENA_ID);
+            UUID newArenaUuid = newInstance.getTag(RavenTags.CASTLE_SIEGE_ARENA_ID);
             if (newArenaUuid != null) {
                 SiegeArena newArena = arenaMap.get(newArenaUuid);
                 if (newArena != null) {
@@ -52,7 +52,7 @@ public class ArenaManager {
         UUID uuid = UUID.randomUUID();
 
         Instance instance = template.createInstance();
-        instance.setTag(RavenTags.INSTANCE_CASTLE_SIEGE_ARENA_ID, uuid);
+        instance.setTag(RavenTags.CASTLE_SIEGE_ARENA_ID, uuid);
 
 
         SiegeArena arena = new SiegeArena(

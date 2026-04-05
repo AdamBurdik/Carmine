@@ -50,7 +50,7 @@ public class SiegeArena {
 
     public void removePlayer(@NotNull Player player) {
         // Somehow actually sent player to lobby
-        player.setInstance(Raven.lobbyInstance);
+        Raven.lobbyService.sendToLobby(player);
     }
 
     // Gets called when player change instance
@@ -73,6 +73,10 @@ public class SiegeArena {
         teamManager.removePlayer(player);
         player.removeTag(RavenTags.PLAYER_CURRENT_GAMEMODE);
 
+        broadcast(
+                Component.text("Player " + player.getUsername() + " left")
+        );
+
         if (
                 phaseManager.getCurrentPhase() == SiegePhase.PREPARATION &&
                 !teamManager.hasEnoughPlayers()
@@ -80,14 +84,20 @@ public class SiegeArena {
             phaseManager.transition(SiegePhase.WAITING);
         }
 
-        broadcast(
-                Component.text("Player " + player.getUsername() + " left")
-        );
+        if (player.hasTag(RavenTags.CASTLE_SIEGE_KING_PLAYER)) {
+            broadcast(
+                    Component.text("King player left, there-for attackers won the game!")
+            );
+            stop();
+        }
     }
-
 
     public void start() {
         phaseManager.transition(SiegePhase.PREPARATION);
+    }
+
+    public void stop() {
+        phaseManager.transition(SiegePhase.ENDED);
     }
 
     public void broadcast(@NotNull Component message) {

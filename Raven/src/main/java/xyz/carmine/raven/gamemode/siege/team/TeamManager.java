@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 public class TeamManager {
-    private final SiegeTeam attackers = SiegeTeam.empty();
-    private final SiegeTeam defenders = SiegeTeam.empty();
+    private final AttackerTeam attackers = AttackerTeam.empty();
+    private final DefenderTeam defenders = DefenderTeam.empty();
     private final int minimumPlayerCount;
     private final int maximumPlayerCount;
 

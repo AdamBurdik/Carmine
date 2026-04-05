@@ -19,6 +19,7 @@ import xyz.carmine.raven.exception.ServiceConnectionException;
 import xyz.carmine.raven.gamemode.siege.SiegeGamemode;
 import xyz.carmine.raven.gamemode.siege.arena.ArenaConfigRepository;
 import xyz.carmine.raven.gamemode.siege.arena.ArenaManager;
+import xyz.carmine.raven.lobby.LobbyService;
 import xyz.carmine.raven.player.RavenPlayer;
 import xyz.carmine.raven.player.RavenPlayerProvider;
 import xyz.carmine.raven.player.data.PlayerData;
@@ -38,8 +39,7 @@ public class Raven {
     private static final String REDIS_HOST = "localhost";
     private static final int REDIS_PORT = 6379;
 
-    public static Instance lobbyInstance;
-
+    public static LobbyService lobbyService;
     public static DiscordService discordService;
     public static PlayerDataService playerDataService;
     public static PlayerInstanceService playerInstanceService;
@@ -108,8 +108,7 @@ public class Raven {
         MinecraftServer.getConnectionManager().setPlayerProvider(new RavenPlayerProvider());
 
         // Create lobby instance
-        lobbyInstance = InstanceTemplateRegistry.get("lobby")
-                .createInstance();
+        lobbyService = new LobbyService(InstanceTemplateRegistry.get("lobby"));
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
@@ -118,8 +117,8 @@ public class Raven {
             PlayerData data = playerDataService.getOrCreate(player.getUuid()).join();
             player.setData(data);
 
-            event.setSpawningInstance(lobbyInstance);
-            player.setRespawnPoint(new Pos(0, 2, 0));
+            event.setSpawningInstance(lobbyService.getLobbyInstance());
+            player.setRespawnPoint(lobbyService.getSpawnPosition());
         });
 
         // Register the event only if discord service successfully connected

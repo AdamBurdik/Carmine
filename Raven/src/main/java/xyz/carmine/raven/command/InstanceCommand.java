@@ -46,9 +46,7 @@ public class InstanceCommand extends Command {
                             player.sendMessage("You have been teleported to your own instance");
                         });
                 case "lobby" -> {
-                    Instance lobby = Raven.lobbyInstance;
-                    InstanceSettings settings = lobby.getTag(RavenTags.INSTANCE_SETTINGS);
-                    player.setInstance(lobby, settings.getSpawnPos());
+                    Raven.lobbyService.sendToLobby(player);
                     player.sendMessage("You have been teleported to lobby");
                 }
             }

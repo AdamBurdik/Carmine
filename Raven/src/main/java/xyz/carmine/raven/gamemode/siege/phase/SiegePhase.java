@@ -4,5 +4,6 @@ public enum SiegePhase {
     WAITING,
     PREPARATION,
     ACTIVE,
-    ENDED
+    ENDED,
+    EXPIRED
 }
