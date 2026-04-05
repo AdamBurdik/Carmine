@@ -12,9 +12,13 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.world.DimensionType;
 import xyz.carmine.raven.command.InstanceCommand;
+import xyz.carmine.raven.command.SiegeCommand;
 import xyz.carmine.raven.external.discord.DiscordService;
 import xyz.carmine.raven.exception.ServerStartException;
 import xyz.carmine.raven.exception.ServiceConnectionException;
+import xyz.carmine.raven.gamemode.siege.SiegeGamemode;
+import xyz.carmine.raven.gamemode.siege.arena.ArenaConfigRepository;
+import xyz.carmine.raven.gamemode.siege.arena.ArenaManager;
 import xyz.carmine.raven.player.RavenPlayer;
 import xyz.carmine.raven.player.RavenPlayerProvider;
 import xyz.carmine.raven.player.data.PlayerData;
@@ -27,6 +31,8 @@ import xyz.carmine.raven.world.instance.template.InstanceTemplate;
 import xyz.carmine.raven.world.instance.InstanceType;
 import xyz.carmine.raven.world.instance.template.InstanceTemplateRegistry;
 
+import java.nio.file.Path;
+
 @Slf4j
 public class Raven {
     private static final String REDIS_HOST = "localhost";
@@ -37,6 +43,8 @@ public class Raven {
     public static DiscordService discordService;
     public static PlayerDataService playerDataService;
     public static PlayerInstanceService playerInstanceService;
+
+    public static SiegeGamemode siegeGamemode;
 
     static void main() throws ServerStartException {
         try {
@@ -78,10 +86,23 @@ public class Raven {
                         DimensionType.OVERWORLD,
                         null,
                         new InstanceSettings(new Pos(0, 2, 0), false)
+                ),
+                new InstanceTemplate(
+                        "siege-arena",
+                        InstanceType.SIEGE_ARENA,
+                        unit -> unit.modifier().fillHeight(0, 1, Block.GLASS),
+                        DimensionType.OVERWORLD,
+                        null,
+                        new InstanceSettings(new Pos(0, 2, 0), false)
                 )
         );
 
         MinecraftServer server = MinecraftServer.init(new Auth.Offline());
+
+        // Create gamemodes
+        siegeGamemode = new SiegeGamemode(
+                new ArenaConfigRepository(Path.of(""))
+        );
 
         // Set custom player provider
         MinecraftServer.getConnectionManager().setPlayerProvider(new RavenPlayerProvider());
@@ -119,6 +140,7 @@ public class Raven {
         }, TaskSchedule.tick(1), TaskSchedule.minutes(5));
 
         MinecraftServer.getCommandManager().register(new InstanceCommand());
+        MinecraftServer.getCommandManager().register(new SiegeCommand());
 
         server.start("localhost", 25565);
 

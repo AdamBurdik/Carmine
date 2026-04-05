@@ -15,6 +15,8 @@ dependencies {
     implementation("net.minestom:minestom:2026.03.25-1.21.11")
 
     implementation("redis.clients:jedis:7.4.0")
+
+    implementation("com.google.guava:guava:33.5.0-jre")
 }
 
 tasks.shadowJar {
