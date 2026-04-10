@@ -17,6 +17,10 @@ dependencies {
     implementation("redis.clients:jedis:7.4.0")
 
     implementation("com.google.guava:guava:33.5.0-jre")
+    implementation("net.bytebuddy:byte-buddy:1.18.8")
+
+    implementation("com.electronwill.night-config:core:3.8.4")
+    implementation("com.electronwill.night-config:toml:3.8.4")
 }
 
 tasks.shadowJar {
