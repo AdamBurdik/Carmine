@@ -9,7 +9,7 @@ import redis.clients.jedis.Jedis;
 public class Solace {
     static void main() throws InterruptedException {
 
-        String token = "MTQ4OTY3MTczNDMxMDMzODcwMQ.GO-uhS.gyFBcjRd3DAQdAZrfLFvufZv-GdpMCOgUC-Pho";
+        String token = System.getenv("DISCORD_TOKEN");
 
         Jedis subscriberJedis = new Jedis("localhost", 6379);
         Jedis publisherJedis = new Jedis("localhost", 6379);
