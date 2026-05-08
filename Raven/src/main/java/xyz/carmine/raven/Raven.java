@@ -1,5 +1,6 @@
 package xyz.carmine.raven;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
@@ -10,6 +11,9 @@ import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.world.DimensionType;
+import xyz.carmine.raven.core.menu.registry.MenuRegistry;
+import xyz.carmine.raven.feature.example.command.ExampleCommand;
+import xyz.carmine.raven.feature.example.menu.ExampleMenu;
 import xyz.carmine.raven.feature.instance.command.InstanceCommand;
 import xyz.carmine.raven.feature.gamemode.siege.command.SiegeCommand;
 import xyz.carmine.raven.feature.discord.DiscordService;
@@ -43,6 +47,9 @@ public class Raven {
     public static PlayerInstanceService playerInstanceService;
 
     public static SiegeGamemode siegeGamemode;
+
+    @Getter
+    private static MenuRegistry menuRegistry;
 
     static void main() throws ServerStartException {
         try {
@@ -95,6 +102,10 @@ public class Raven {
                 )
         );
 
+        createRegistries();
+
+        menuRegistry.register(ExampleMenu.class, ExampleMenu::new);
+
         MinecraftServer server = MinecraftServer.init(new Auth.Offline());
 
         // Create gamemodes
@@ -138,6 +149,7 @@ public class Raven {
 
         MinecraftServer.getCommandManager().register(new InstanceCommand());
         MinecraftServer.getCommandManager().register(new SiegeCommand());
+        MinecraftServer.getCommandManager().register(new ExampleCommand());
 
         server.start("localhost", 25565);
 
@@ -151,5 +163,9 @@ public class Raven {
             playerDataService.shutdown();
             playerInstanceService.shutdown();
         });
+    }
+
+    private static void createRegistries() {
+        menuRegistry = new MenuRegistry();
     }
 }

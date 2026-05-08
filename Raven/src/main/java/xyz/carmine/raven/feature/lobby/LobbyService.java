@@ -22,6 +22,10 @@ public class LobbyService {
     }
 
     public void sendToLobby(@NotNull Player player) {
+        if (player.getInstance().equals(lobbyInstance)) {
+            return;
+        }
+
         player.setInstance(lobbyInstance, spawnPosition);
         player.setGameMode(GameMode.ADVENTURE);
         player.setHealth(20);

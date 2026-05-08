@@ -14,6 +14,8 @@ public class RavenTags {
         return PREFIX + value;
     }
 
+    public static final Tag<Boolean> MENU_ITEM = Tag.Boolean(prefixed("menu:item"));
+
     public static final Tag<String> INSTANCE_TEMPLATE_ID = Tag.String(prefixed("instance:template-id"));
     public static final Tag<InstanceSettings> INSTANCE_SETTINGS = Tag.Structure(prefixed("instance:settings"), InstanceSettings.TAG_SERIALIZER);
 
