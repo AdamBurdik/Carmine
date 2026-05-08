@@ -9,7 +9,7 @@ import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
-import xyz.carmine.raven.exception.ConfigParsingException;
+import xyz.carmine.raven.core.exception.ConfigParsingException;
 
 import java.io.File;
 import java.lang.reflect.InvocationHandler;

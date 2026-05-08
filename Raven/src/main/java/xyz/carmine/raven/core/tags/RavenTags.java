@@ -2,8 +2,8 @@ package xyz.carmine.raven.core.tags;
 
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
-import xyz.carmine.raven.gamemode.GamemodeType;
-import xyz.carmine.raven.world.instance.InstanceSettings;
+import xyz.carmine.raven.feature.gamemode.GamemodeType;
+import xyz.carmine.raven.core.world.instance.InstanceSettings;
 
 import java.util.UUID;
 
