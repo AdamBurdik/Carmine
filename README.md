@@ -14,4 +14,7 @@ Discord bot meant to work with Raven
 ### **[Lumen](./Lumen/LUMEN.md)**
 Shared utility library for common stuff
 
+### **[CLI](./CLI/CLI.md)**
+Useful cli tool
+
 > See individual module READMEs for setup instructions and documentation.
